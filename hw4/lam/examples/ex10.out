@@ -1,0 +1,22 @@
+Expression:
+  let x = 42 in
+  let y = ((((((3 + 4) + 5) + 6) + 7) + 8) + 9) in
+  let id = (lambda x. x) in
+  ((lambda z. if (x = y) then (lambda x. z) else id) 99)
+
+Typechecking the expression...
+Initial Type:
+  'd
+
+Constraints:
+  int = int
+  bool = bool
+  ('b -> ('c -> 'b)) = (int -> 'd)
+  ('c -> 'b) = ('a -> 'a)
+
+Result:
+  (int -> int)
+
+Evaluating the expression...
+Result:
+  <closure>

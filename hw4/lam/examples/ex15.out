@@ -1,0 +1,17 @@
+Expression:
+  let id = (lambda p. p) in #1 (id (true , 4))
+
+Typechecking the expression...
+Initial Type:
+  'c
+
+Constraints:
+  'b = ('c * 'd)
+  ('a -> 'a) = ((bool * int) -> 'b)
+
+Result:
+  bool
+
+Evaluating the expression...
+Result:
+  true

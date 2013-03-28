@@ -1,0 +1,18 @@
+Expression:
+  let f = (lambda x. x) in let g = (lambda z. (z + (f z))) in true
+
+Typechecking the expression...
+Initial Type:
+  bool
+
+Constraints:
+  'b = int
+  'c = int
+  ('a -> 'a) = ('b -> 'c)
+
+Result:
+  bool
+
+Evaluating the expression...
+Result:
+  true

@@ -1,0 +1,16 @@
+Expression:
+  let rec f x = (f x) in (f 1)
+
+Typechecking the expression...
+Initial Type:
+  'd
+
+Constraints:
+  'c = 'b
+  ('a -> 'b) = (int -> 'd)
+  ('a -> 'b) = ('a -> 'c)
+
+Result:
+  'd
+
+Evaluating the expression...

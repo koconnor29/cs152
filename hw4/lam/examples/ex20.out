@@ -1,0 +1,27 @@
+Expression:
+  let rec fib n =
+  if (n = 0) then 0 else
+    if (n = 1) then 1 else ((fib (n - 1)) + (fib (n - 2)))
+  in (fib 6)
+
+Typechecking the expression...
+Initial Type:
+  'e
+
+Constraints:
+  int = int
+  int = 'b
+  bool = bool
+  'a = int
+  'c = int
+  'd = int
+  ('a -> 'b) = (int -> 'c)
+  ('a -> 'b) = (int -> 'd)
+  ('a -> 'b) = (int -> 'e)
+
+Result:
+  int
+
+Evaluating the expression...
+Result:
+  8

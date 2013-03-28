@@ -1,0 +1,14 @@
+Expression:
+  let rec f n = (n + 42) in (f true)
+
+Typechecking the expression...
+Initial Type:
+  'c
+
+Constraints:
+  int = int
+  int = 'b
+  'a = int
+  ('a -> 'b) = (bool -> 'c)
+
+Fatal error: exception Check.UnificationError

@@ -1,0 +1,17 @@
+Expression:
+  (((lambda f. (lambda x. let g = f in (g 0)))
+     (lambda x. if x then true else false))
+    true)
+
+Typechecking the expression...
+Initial Type:
+  'f
+
+Constraints:
+  bool = bool
+  'a = (int -> 'c)
+  'd = bool
+  'e = (bool -> 'f)
+  ('a -> ('b -> 'c)) = (('d -> bool) -> 'e)
+
+Fatal error: exception Check.UnificationError

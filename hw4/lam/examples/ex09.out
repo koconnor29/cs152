@@ -1,0 +1,5 @@
+Expression:
+  let x = 42 in (x + y)
+
+Typechecking the expression...
+Fatal error: exception Check.TypeError

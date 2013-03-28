@@ -1,0 +1,2 @@
+let f = (lambda x . x) in 
+(f 7, f true)

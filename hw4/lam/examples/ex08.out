@@ -1,0 +1,17 @@
+Expression:
+  let p = (7 , true) in if #2 p then (#1 p + 35) else #2 p
+
+Typechecking the expression...
+Initial Type:
+  int
+
+Constraints:
+  int = int
+  int = 'f
+  'b = bool
+  'c = int
+  (int * bool) = ('a * 'b)
+  (int * bool) = ('c * 'd)
+  (int * bool) = ('e * 'f)
+
+Fatal error: exception Check.UnificationError

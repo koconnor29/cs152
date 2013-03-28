@@ -1,0 +1,17 @@
+Expression:
+  let rec f n = true in (f 1)
+
+Typechecking the expression...
+Initial Type:
+  'c
+
+Constraints:
+  bool = 'b
+  ('a -> 'b) = (int -> 'c)
+
+Result:
+  bool
+
+Evaluating the expression...
+Result:
+  true

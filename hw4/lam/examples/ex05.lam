@@ -1,0 +1,4 @@
+let y = true in 
+let f = (lambda x . lambda y . x) in 
+let g = (lambda z . y) in 
+f g  

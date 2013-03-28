@@ -1,0 +1,23 @@
+Expression:
+  let p = (1 , 3) in
+  let y = 17 in (lambda y. if (#1 p = #2 p) then (y + y) else y)
+
+Typechecking the expression...
+Initial Type:
+  ('a -> int)
+
+Constraints:
+  int = 'a
+  bool = bool
+  'a = int
+  'b = int
+  'e = int
+  (int * int) = ('b * 'c)
+  (int * int) = ('d * 'e)
+
+Result:
+  (int -> int)
+
+Evaluating the expression...
+Result:
+  <closure>

@@ -1,0 +1,11 @@
+Expression:
+  let id = (lambda b. b) in #1 id
+
+Typechecking the expression...
+Initial Type:
+  'b
+
+Constraints:
+  ('a -> 'a) = ('b * 'c)
+
+Fatal error: exception Check.UnificationError

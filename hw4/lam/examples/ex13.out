@@ -1,0 +1,16 @@
+Expression:
+  let f = (lambda x. 1) in
+  let y = 17 in ((lambda y. if (f = y) then (y + y) else y) 99)
+
+Typechecking the expression...
+Initial Type:
+  'c
+
+Constraints:
+  int = 'b
+  bool = bool
+  'b = int
+  ('a -> int) = int
+  ('b -> int) = (int -> 'c)
+
+Fatal error: exception Check.UnificationError

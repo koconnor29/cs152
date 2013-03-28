@@ -1,0 +1,22 @@
+Expression:
+  let rec fact n = if (n = 0) then 1 else (n * (fact (n - 1))) in (fact 3)
+
+Typechecking the expression...
+Initial Type:
+  'd
+
+Constraints:
+  int = int
+  int = 'b
+  bool = bool
+  'a = int
+  'c = int
+  ('a -> 'b) = (int -> 'c)
+  ('a -> 'b) = (int -> 'd)
+
+Result:
+  int
+
+Evaluating the expression...
+Result:
+  6
