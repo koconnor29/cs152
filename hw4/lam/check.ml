@@ -44,12 +44,6 @@ let rec check (g:context) (e0:exp) : typ * constr =
       (TArrow(x',t), c)
   | Let(x,e1,e2) ->
       check g (App(Lam(x,e1),e2))
-      (*
-      let t1, c1 = check g e1 in
-      let g' = VarMap.add x t1 g in
-      let t2, c2 = check g' e2 in
-      (t2, Constr.union c1 c2)
-      *)
   | Int n -> (TInt, Constr.empty)
   | Plus(e1,e2) | Times(e1,e2) | Minus(e1,e2) -> 
       let t1, c1 = check g e1 in
