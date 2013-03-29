@@ -14,6 +14,8 @@ let rec unify (c0:constr) : subst =
         match t1,t2 with
         | TArrow(ta,tb), TArrow(tc,td) -> 
             unify(Constr.add (ta,tc) (Constr.add (tb,td) rest))
+        | TPair(ta,tb), TPair(tc,td) ->
+            unify(Constr.add (ta,tc) (Constr.add (tb,td) rest))
         | TVar x, _ -> if not (VarSet.mem x (ftvs t2)) then
             VarMap.add x t2 (unify (subst_constr rest x t2))
             else raise UnificationError
