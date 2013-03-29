@@ -43,10 +43,13 @@ let rec check (g:context) (e0:exp) : typ * constr =
       let t, c =  check g' e in
       (TArrow(x',t), c)
   | Let(x,e1,e2) ->
+      check g (App(Lam(x,e1),e2))
+      (*
       let t1, c1 = check g e1 in
       let g' = VarMap.add x t1 g in
       let t2, c2 = check g' e2 in
       (t2, Constr.union c1 c2)
+      *)
   | Int n -> (TInt, Constr.empty)
   | Plus(e1,e2) | Times(e1,e2) | Minus(e1,e2) -> 
       let t1, c1 = check g e1 in
@@ -91,5 +94,4 @@ let rec check (g:context) (e0:exp) : typ * constr =
       let g' = VarMap.add f (TArrow(x1,x2)) g in
       let t1, c1 = check g' e1 in
       let t2, c2 = check g' e2 in
-      (t2, Constr.add (x2, t1) (Constr.union c1 c2))
-  | _ -> raise TypeError
+      (t2, Constr.add (t1, x2) (Constr.union c1 c2))
