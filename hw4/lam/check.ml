@@ -43,7 +43,7 @@ let rec check (g:context) (e0:exp) : typ * constr =
       let t, c =  check g' e in
       (TArrow(x',t), c)
   | Let(x,e1,e2) ->
-      check g (App(Lam(x,e1),e2))
+      check g (App(Lam(x,e2),e1))
   | Int n -> (TInt, Constr.empty)
   | Plus(e1,e2) | Times(e1,e2) | Minus(e1,e2) -> 
       let t1, c1 = check g e1 in
@@ -55,22 +55,14 @@ let rec check (g:context) (e0:exp) : typ * constr =
       (TPair(t1,t2), Constr.union c1 c2)
   | Fst e -> 
       let t, c = check g e in
-      (match t with
-      | TPair(t1,t2) -> (t1,c)
-      | TVar x -> 
-          let x1 = next_tvar () in
-          let x2 = next_tvar () in
-          (x1, Constr.add (TVar x,TPair(x1,x2)) c)
-      | _ -> raise TypeError)
+      let x1 = next_tvar () in
+      let x2 = next_tvar () in
+      (x1,Constr.add (t,TPair(x1,x2)) c)
   | Snd e ->
       let t, c = check g e in
-      (match t with
-      | TPair(t1,t2) -> (t2,c)
-      | TVar x -> 
-          let x1 = next_tvar () in
-          let x2 = next_tvar () in
-          (x2, Constr.add (TVar x,TPair(x1,x2)) c)
-      | _ -> raise TypeError )
+      let x1 = next_tvar () in
+      let x2 = next_tvar () in
+      (x2,Constr.add (t,TPair(x1,x2)) c)
   | True | False -> (TBool, Constr.empty)
   | Eq(e1,e2) -> 
       let t1, c1 = check g e1 in
@@ -86,6 +78,7 @@ let rec check (g:context) (e0:exp) : typ * constr =
       let x1 = next_tvar () in
       let x2 = next_tvar () in
       let g' = VarMap.add f (TArrow(x1,x2)) g in
-      let t1, c1 = check g' e1 in
+      let g'' = VarMap.add x x1 g' in
+      let t1, c1 = check g'' e1 in
       let t2, c2 = check g' e2 in
       (t2, Constr.add (t1, x2) (Constr.union c1 c2))

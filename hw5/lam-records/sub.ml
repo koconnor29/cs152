@@ -13,6 +13,10 @@ let rec comb_records (t1 : typ) (t2 : typ) : typ =
   | TRecord(l1), TRecord(l2) -> TRecord(List.append l1 l2)
   | _ -> raise TypeError
 
+let rec contains_label (t1 : typ) (v : var) = 
+  match t1 with
+  | TRecord((v1,s1)::tl1) -> (v1 = v) || (contains_label (TRecord(tl1)) v)
+  | _ -> false
 
 let rec is_subtype (t1 : typ) (t2 : typ) : bool =
   match t1,t2 with
@@ -23,9 +27,9 @@ let rec is_subtype (t1 : typ) (t2 : typ) : bool =
   | TRecord(l1), TRecord(l2) -> 
       (match l1,l2 with
       | _,[] -> true
-      | [],hd::tl -> false
-      | (x1,s1)::tl1, (x2,s2)::tl2 -> 
-          (is_subtype s1 s2) && (is_subtype (TRecord(tl1)) (TRecord(tl2)))
+      | [],_ -> false
+      | (v1,s1)::tl1,(v2,s2)::tl2 ->  (v1 = v2) && (is_subtype s1 s2) && 
+          (is_subtype (TRecord(tl1)) (TRecord(tl2)))
       )
   | _ -> false
 
@@ -38,14 +42,16 @@ let rec lub (t1 : typ) (t2 : typ) : typ =
       TArrow((glb ty1 ty3), (lub ty2 ty4))
   | TRecord(l1), TRecord(l2) ->
     (match l1, l2 with
-    | [], _ -> TRecord([])
+    | [],_ -> TRecord([])
     | _,[] -> TRecord([])
     | (x1, ty1)::tl1, (x2, ty2)::tl2 ->
-        let joe = [(x1,(lub ty1 ty2))] in
-        let temp = TRecord(joe) in
-        let temp1 = TRecord(tl1) in
-        let temp2 = TRecord(tl2) in
-        comb_records temp (lub temp1 temp2)
+        if (x1 = x2) then
+          let temp = TRecord([(x1,(lub ty1 ty2))]) in
+          let temp1 = TRecord(tl1) in
+          let temp2 = TRecord(tl2) in
+          comb_records temp (lub temp1 temp2)
+        else
+          TRecord([])
     )
   | _ -> raise TypeError
 and glb (t1 : typ) (t2 : typ) : typ =
@@ -59,10 +65,13 @@ and glb (t1 : typ) (t2 : typ) : typ =
     | [], _ -> TRecord(l2)
     | _,[] -> TRecord(l1)
     | (x1, ty1)::tl1, (x2, ty2)::tl2 ->
-        let temp = TRecord([(x1,(glb ty1 ty2))]) in
-        let temp1 = TRecord(tl1) in
-        let temp2 = TRecord(tl2) in
-        comb_records temp (lub temp1 temp2)
+        if (x1 = x2) then
+          let temp = TRecord([(x1,(glb ty1 ty2))]) in
+          let temp1 = TRecord(tl1) in
+          let temp2 = TRecord(tl2) in
+          comb_records temp (glb temp1 temp2)
+        else
+          raise TypeError
     )
   | _ -> raise TypeError
 
@@ -102,6 +111,7 @@ let rec check (g : context) (e : exp) : typ =
       )
   | Field(e1,v) ->
       (match (check g e1) with
-      | TRecord(l) -> lookup v l
+      | TRecord(l) -> 
+          if (contains_label (TRecord(l)) v) then lookup v l else raise TypeError
       | _ -> raise TypeError
       )
