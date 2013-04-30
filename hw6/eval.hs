@@ -51,8 +51,8 @@ mwBind (MWriter mW) f =
 mwFailure :: (Monoid w) => MaybeWriter w a
 mwFailure = MWriter(\s -> Nothing)
 
-mwOutput :: (Monoid w) => w -> MaybeWriter w ()
-mwOutput w = MWriter(\s -> Just ((), mappend s w) )
+mwOutput :: (Monoid w) => w -> MaybeWriter w Val 
+mwOutput w = MWriter(\s -> Just (UnitVal, mappend s w) )
 
 -- ### END Part 2 ###
 
@@ -96,7 +96,7 @@ evalM (Concat e1 e2) env = do
   return (StringVal(s1 ++ s2))
 evalM (Output e) env = do
   s <- coerceStr =<< evalM e env
-  (\u -> return UnitVal) =<< mwOutput s 
+  mwOutput s
 evalM (UnitLit) env = return (UnitVal)
 -- ### END Part 3 ###
 
@@ -156,12 +156,12 @@ e4 = parse [sexp|
 
 e5 :: Exp
 e5 = parse [sexp|
-  ((lambda (x) (concat "Hey " x)) "Teachers, Leave Those Kids Alone")
+  ((lambda (x) (concat "Hey " x)) "Fella")
 |]
 
 e6 :: Exp
 e6 = parse [sexp|
-  (((lambda (f) (lambda (x) (f x))) (lambda (x) (concat "Hey" x))) "Kevin")
+  (((lambda (f) (lambda (x) (f x))) (lambda (x) (concat "Hey " x))) "Kevin")
 
 |]
 
@@ -175,6 +175,16 @@ e8 = parse [sexp|
   (output ((lambda (x) (x "MAN")) ((lambda (x) (lambda (y) (concat x y))) "SUPER")))
 |]
 
+e9 :: Exp
+e9 = parse [sexp|
+  ((lambda (x) (x (lambda (x) x))) (lambda (x) x))
+|]
+
+e10 :: Exp
+e10 = parse [sexp|
+  unit 
+|]
+
 -- The main function that is called when you 'runhaskell eval.hs'.
 -- As is, it prints "oh hai"
 --
@@ -186,7 +196,7 @@ e8 = parse [sexp|
 -- This commented out main function will run e1 through your evaluator and
 -- print the output.
 main :: IO ()
-main = putStrLn $ show $ eval e8 Map.empty
+main = putStrLn $ show $ eval e10 Map.empty
 
 ---------------------------------------------------
 ----- parsing s-expressions into our language -----
